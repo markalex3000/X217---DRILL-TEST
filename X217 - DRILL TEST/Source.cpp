@@ -29,6 +29,7 @@ public:
 		:kind(ch), value(0) { }
 	Token(char ch, double val)     // make a Token from a char and a double
 		:kind(ch), value(val) { }
+	void show();     // MA add to show contents of Token
 };
 
 //------------------------------------------------------------------------------
@@ -59,6 +60,14 @@ void Token_stream::putback(Token t)
 	if (full) error("putback() into a full buffer");
 	buffer = t;       // copy t to buffer
 	full = true;      // buffer is now full
+}
+
+//------------------------------------------------------------------------------
+
+// The show() member function outputs the conents of the token:
+void Token::show()
+{
+	cout << "Type = " << kind << " Value = " << value <<"\n";
 }
 
 //------------------------------------------------------------------------------
@@ -106,7 +115,9 @@ double expression();    // declaration so that primary() can call expression()
 						// deal with numbers and parentheses
 double primary()
 {
+	cout << "---Entering primary()\n";
 	Token t = ts.get();
+	cout << "---"; t.show();
 	switch (t.kind) {
 	case '(':    // handle '(' expression ')'
 	{
@@ -127,8 +138,12 @@ double primary()
 // deal with *, /, and %
 double term()
 {
+	cout << "--Entering term()\n";
 	double left = primary();
+	cout << "--Term back from primary()\n";
+
 	Token t = ts.get();        // get the next token from token stream
+	cout << "--"; t.show();
 
 	while (true) {
 		switch (t.kind) {
@@ -155,7 +170,9 @@ double term()
 // deal with + and -
 double expression()
 {
+	cout << "-Entering expression()\n";
 	double left = term();      // read and evaluate a Term
+	cout << "-Expression - back from term()\n";
 	Token t = ts.get();        // get the next token from token stream
 
 	while (true) {
@@ -178,17 +195,19 @@ double expression()
 //------------------------------------------------------------------------------
 
 int main()
+
 try
 {
+	double value{ 0 };
 	while (cin) {
 		Token t = ts.get();
 
 		if (t.kind == 'q') break; // 'q' for quit
 		if (t.kind == ';')        // ';' for "print now"
-			cout << "=" << t.value << '\n';
+			cout << "=" << value << '\n';
 		else
 			ts.putback(t);
-		t.value = expression();
+		value = expression();
 	}
 	keep_window_open();
 }

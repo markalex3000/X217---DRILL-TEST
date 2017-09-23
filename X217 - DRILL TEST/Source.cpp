@@ -90,7 +90,7 @@ Token Token_stream::get()
 		return Token(ch);        // let each character represent itself
 	case '.':
 	case '0': case '1': case '2': case '3': case '4':
-	case '5': case '6': case '7': case '9':
+	case '5': case '6': case '7': case '8': case '9':
 	{
 		cin.putback(ch);         // put digit back into the input stream
 		double val;
@@ -123,6 +123,7 @@ double primary()
 	{
 		double d = expression();
 		t = ts.get();
+		cout << "----Case ( "; t.show();
 		if (t.kind != ')') error("')' expected");
 		return d;
 	}
@@ -150,6 +151,7 @@ double term()
 		case '*':
 			left *= primary();
 			t = ts.get();
+			break;
 		case '/':
 		{
 			double d = primary();
@@ -182,7 +184,7 @@ double expression()
 			t = ts.get();
 			break;
 		case '-':
-			left += term();    // evaluate Term and subtract
+			left -= term();    // evaluate Term and subtract
 			t = ts.get();
 			break;
 		default:

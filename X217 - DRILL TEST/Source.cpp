@@ -86,7 +86,7 @@ Token Token_stream::get()
 	switch (ch) {
 	case '=':    // for "print"
 	case 'x':    // for "exit"
-	case '(': case ')': case '+': case '-': case '*': case '/': case '{': case '}':
+	case '(': case ')': case '+': case '-': case '*': case '/': case '{': case '}': case '!':
 		return Token(ch);        // let each character represent itself
 								// NEED to add factorial operator here
 	case '.':
@@ -114,6 +114,11 @@ double expression();    // declaration so that primary() can call expression()
 						//------------------------------------------------------------------------------
 
 						// deal with numbers and parentheses
+double factorial(int n)
+{
+	return (n == 1 || n == 0) ? 1 : factorial(n - 1) * n;
+}
+
 double primary()
 {
 	cout << "---Entering primary()\n";
@@ -138,6 +143,7 @@ double primary()
 	}
 	case '8':            // we use '8' to represent a number
 		return t.value;  // return the number's value
+
 	case 'x':
 		ts.putback(t);
 		return t.kind;
@@ -157,6 +163,13 @@ double term()
 
 	Token t = ts.get();        // get the next token from token stream
 	cout << "--"; t.show();
+	if (t.kind == '!')
+	{
+		int temp = 0;
+		temp = left;
+		left = factorial(temp);
+		t = ts.get();
+	}
 
 	while (true) {
 		switch (t.kind) {

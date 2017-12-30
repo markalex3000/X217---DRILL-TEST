@@ -64,7 +64,7 @@ void Token_stream::putback(Token t)
 
 //------------------------------------------------------------------------------
 
-// The show() member function outputs the conents of the token:
+// The show() member function outputs the contents of the token:
 void Token::show()
 {
 	cout << "Type = " << kind << " Value = " << value <<"\n";
@@ -88,6 +88,7 @@ Token Token_stream::get()
 	case 'x':    // for "exit"
 	case '(': case ')': case '+': case '-': case '*': case '/': case '{': case '}':
 		return Token(ch);        // let each character represent itself
+								// NEED to add factorial operator here
 	case '.':
 	case '0': case '1': case '2': case '3': case '4':
 	case '5': case '6': case '7': case '8': case '9':
@@ -220,7 +221,7 @@ try
 	while (cin) {
 		Token t = ts.get();
 
-		if (t.kind == 'x')
+		if (t.kind == 'x')    //Test for exit request and exit if indicated
 		{
 			cout << "Exiting application... \n";
 			break; // 'x' for exit
